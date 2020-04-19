@@ -12,6 +12,81 @@
 		<script src="/assets/OrbitControls.js"></script>
 		<script src="/assets/MTLLoader.js"></script>
 		<script src="/assets/OBJLoader.js"></script>
-		<script src="/scripts.js"></script>
+		<script>
+		let scene = new THREE.Scene
+		viewSize = 900;
+		aspectRatio = window.innerWidth/window.innerHeight;
+		scene.background = new THREE.Color( 0xffffff);
+		let camera = new THREE.PerspectiveCamera( 50, aspectRatio, 0.01, 100000 );
+		let renderer = new THREE.WebGLRenderer({ alpha: true });
+		renderer.setSize( window.innerWidth, window.innerHeight );
+
+		let count = 0;
+
+		document.body.appendChild (renderer.domElement);
+
+		window.addEventListener('resize', ()=>{
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			camera.aspect = window.innerWidth / window.innerHeight
+			camera.updateProjectionMatrix()
+		})
+
+		camera.position.y = 20000;
+
+		let controls = new THREE.OrbitControls(camera, renderer.domElement);
+		controls.enableDamping = true;
+		// controls.dampingFactor = 0.25;
+		controls.enableZoom = true;
+
+		let keyLight = new THREE.DirectionalLight(0xddaaff,.5);
+		keyLight.position.set(-100,0,100);
+
+		let fillLight = new THREE.DirectionalLight(0xffaadd, .55);
+		fillLight.position.set(100,0,100);
+
+		let backLight = new THREE.DirectionalLight(0xffffff, 1.0);
+		backLight.position.set(100,0,-100).normalize();
+
+		scene.add(keyLight);
+		scene.add(fillLight);
+		scene.add(backLight);
+
+
+
+
+		document.body.addEventListener("dblclick", myFunction);
+
+		function myFunction(){
+			if (count > 14){
+
+			} else {
+
+				let mtlLoader = new THREE.MTLLoader();
+				mtlLoader.setTexturePath('/assets/');
+				mtlLoader.setPath('/assets/');
+				mtlLoader.load(count.toString() + '.mtl', function(materials){
+				materials.preload();
+
+					let objLoader = new THREE.OBJLoader();
+					objLoader.setMaterials(materials);
+					objLoader.setPath('/assets/');
+					objLoader.load(count.toString() + '.obj', function(object){
+
+						scene.add(object);
+						count ++;
+					})
+				})
+			}
+		}
+
+		let animate = function () {
+			requestAnimationFrame( animate );
+			controls.update();
+			renderer.render(scene, camera);
+
+		}
+
+		animate();
+</script>
 	</body>
 </html>
