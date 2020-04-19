@@ -1,10 +1,12 @@
-
-
 let scene = new THREE.Scene
+viewSize = 900;
+aspectRatio = window.innerWidth/window.innerHeight;
 scene.background = new THREE.Color( 0xffffff);
-let camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 100000 );
+let camera = new THREE.PerspectiveCamera( 50, aspectRatio, 0.01, 100000 );
 let renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize( window.innerWidth, window.innerHeight );
+
+let count = 0;
 
 document.body.appendChild (renderer.domElement);
 
@@ -15,7 +17,6 @@ window.addEventListener('resize', ()=>{
 })
 
 camera.position.y = 20000;
-// camera.rotation.y = 3.1415;
 
 let controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
@@ -35,23 +36,33 @@ scene.add(keyLight);
 scene.add(fillLight);
 scene.add(backLight);
 
-let mtlLoader = new THREE.MTLLoader();
-mtlLoader.setTexturePath('/assets/');
-mtlLoader.setPath('/assets/');
-mtlLoader.load('200419.mtl', function(materials){
-	materials.preload();
-
-	let objLoader = new THREE.OBJLoader();
-	objLoader.setMaterials(materials);
-	objLoader.setPath('/assets/');
-	objLoader.load('200419.obj', function(object){
-
-		scene.add(object);
-	})
-
-})
 
 
+
+document.body.addEventListener("dblclick", myFunction);
+
+function myFunction(){
+	if (count > 14){
+
+	} else {
+
+		let mtlLoader = new THREE.MTLLoader();
+		mtlLoader.setTexturePath('/assets/');
+		mtlLoader.setPath('/assets/');
+		mtlLoader.load(count.toString() + '.mtl', function(materials){
+		materials.preload();
+
+			let objLoader = new THREE.OBJLoader();
+			objLoader.setMaterials(materials);
+			objLoader.setPath('/assets/');
+			objLoader.load(count.toString() + '.obj', function(object){
+
+				scene.add(object);
+				count ++;
+			})
+		})
+	}
+}
 
 let animate = function () {
 	requestAnimationFrame( animate );
