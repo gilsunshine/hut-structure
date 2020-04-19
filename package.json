@@ -13,6 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "three-obj-mtl-loader": "^1.0.3",
+    "three-orbitcontrols": "^2.110.3"
   }
 }
