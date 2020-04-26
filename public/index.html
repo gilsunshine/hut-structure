@@ -51,6 +51,20 @@
 		scene.add(fillLight);
 		scene.add(backLight);
 
+		let shackLoader = new THREE.MTLLoader();
+		shackLoader.setTexturePath('/assets/');
+		shackLoader.setPath('/assets/');
+		shackLoader.load('shackleton.mtl', function(materials){
+		shackLoader.preload();
+
+			let shackObjLoader = new THREE.OBJLoader();
+			shackObjLoader.setMaterials(materials);
+			shackObjLoader.setPath('/assets/');
+			shackObjLoader.load('shackleton.obj', function(object){
+
+				scene.add(object);
+			})
+
 
 
 
